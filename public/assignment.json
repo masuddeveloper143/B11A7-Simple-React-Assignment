@@ -1,0 +1,56 @@
+[
+  {
+    "id": 1,
+    "title": "Vintage Leica M3 Camera",
+    "description": "Classic camera",
+    "currentBidPrice": 2850,
+    "timeLeft": "2 Days left",
+    "bidsCount": 5,
+    "image": "https://i.ibb.co/4pDNDk1/camera.jpg"
+  },
+  {
+    "id": 2,
+    "title": "1965 Gibson SG Guitar",
+    "description": "Electric guitar",
+    "currentBidPrice": 2850,
+    "timeLeft": "2 Days left",
+    "bidsCount": 3,
+    "image": "https://i.ibb.co/7QpKsCX/guitar.jpg"
+  },
+  {
+    "id": 3,
+    "title": "Apple Macintosh 128K",
+    "description": "Old computer",
+    "currentBidPrice": 2850,
+    "timeLeft": "2 Days left",
+    "bidsCount": 2,
+    "image": "https://i.ibb.co/0jZcJ3M/computer.jpg"
+  },
+  {
+    "id": 4,
+    "title": "Rolex Submariner",
+    "description": "Luxury watch",
+    "currentBidPrice": 2850,
+    "timeLeft": "2 Days left",
+    "bidsCount": 7,
+    "image": "https://i.ibb.co/W0J9z9v/watch.jpg"
+  },
+  {
+    "id": 5,
+    "title": "The Great Gatsby Book",
+    "description": "Classic novel",
+    "currentBidPrice": 2850,
+    "timeLeft": "2 Days left",
+    "bidsCount": 4,
+    "image": "https://i.ibb.co/2FsfXqM/book.jpg"
+  },
+  {
+    "id": 6,
+    "title": "Eames Lounge Chair",
+    "description": "Modern chair",
+    "currentBidPrice": 2850,
+    "timeLeft": "2 Days left",
+    "bidsCount": 6,
+    "image": "https://i.ibb.co/Tb0wZ7M/chair.jpg"
+  }
+]
