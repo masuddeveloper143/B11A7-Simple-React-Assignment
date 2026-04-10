@@ -1,100 +1,188 @@
-
 import { useEffect, useState } from 'react'
 import { CiHeart } from "react-icons/ci";
 import './App.css'
 
 function App() {
-  const [data, setData] = useState([])
 
+  const [favorites, setFavorites] = useState([]);
+  const [total, setTotal] = useState(0);
+  const [data, setData] = useState([]);
+
+  // ✅ Fetch Data
   useEffect(() => {
     fetch('assignment.json')
       .then(res => res.json())
       .then(data => setData(data))
   }, [])
+
+  // ✅ Add Favorite (duplicate block)
+  const handleFavorite = (item) => {
+    const exists = favorites.find(f => f.id === item.id);
+    if (exists) return;
+
+    setFavorites([...favorites, item]);
+    setTotal(total + item.currentBidPrice);
+
+    toast.success("Added to Favorites ❤️");
+  };
+
+  // ✅ Remove Favorite
+  const handleRemove = (id, price) => {
+    const updated = favorites.filter(item => item.id !== id);
+    setFavorites(updated);
+    setTotal(total - price);
+  };
+
   return (
     <>
-      {/* <h1 className='text-5xl font-bold text-center text-red-500'>B11A7-Simple-React-Assignment</h1> */}
 
+      {/* NAVBAR */}
+      <div className='mx-7'>
+        <div className="navbar shadow-sm flex justify-between items-center">
+          <a className="btn btn-ghost text-xl flex gap-0">
+            Action<span className='text-red-400'>Gallary</span>
+          </a>
 
-      <div className='navbar-container'>
-        <div className="navbar bg-base-100 shadow-sm">
-          <div className="flex-1">
-            <a className="btn btn-ghost text-xl">daisyUI</a>
+          <ul className='flex gap-10'>
+            <li>Home</li>
+            <li>Auctions</li>
+            <li>Categories</li>
+            <li>Works</li>
+          </ul>
+
+          <img
+            className="w-10 rounded-full"
+            src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp"
+          />
+        </div>
+      </div>
+
+      {/* HERO */}
+      <div
+        className="hero min-h-[400px]"
+        style={{
+          backgroundImage:
+            "url(https://img.daisyui.com/images/stock/photo-1507358522600-9f71e620c44e.webp)",
+        }}
+      >
+        <div className="hero-overlay bg-black/50"></div>
+        <div className="hero-content text-white text-left">
+          <div>
+            <h1 className="text-4xl font-bold mb-4">
+              Bid on Unique Items from <br /> Around the World
+            </h1>
+            <p className="mb-5 text-gray-300">
+              Discover rare collectibles, luxury goods, and vintage treasures
+            </p>
+            <button className="btn bg-white text-black rounded-full">
+              Explore Auctions
+            </button>
           </div>
-          <div className="flex-none">
-            <div className="dropdown dropdown-end">
-              <div tabIndex={0} role="button" className="btn btn-ghost btn-circle">
-                <div className="indicator">
-                  <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"> <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" /> </svg>
-                  <span className="badge badge-sm indicator-item">8</span>
+        </div>
+      </div>
+
+      {/* TITLE */}
+      <div className='mx-40 my-5'>
+        <h1 className='text-3xl font-bold'>Active Auctions</h1>
+        <p>Discover and bid on extraordinary items</p>
+      </div>
+
+      {/* MAIN */}
+      <div className='flex gap-5 mx-40'>
+
+        {/* 🔥 TABLE (IMPORTANT FIX) */}
+        <div className='w-[70%]'>
+          <table className="table w-full border">
+            <thead>
+              <tr>
+                <th>Items</th>
+                <th>Current Bid</th>
+                <th>Time Left</th>
+                <th>Bid</th>
+              </tr>
+            </thead>
+
+            <tbody>
+              {
+                data.map(item => (
+                  <tr key={item.id}>
+                    <td className="flex items-center gap-3">
+                      <img className="w-12" src={item.image} />
+                      {item.title}
+                    </td>
+
+                    <td>${item.currentBidPrice}</td>
+                    <td>{item.timeLeft}</td>
+
+                    <td>
+                      <button
+                        onClick={() => handleFavorite(item)}
+                        disabled={favorites.find(f => f.id === item.id)}
+                        className={
+                          favorites.find(f => f.id === item.id)
+                            ? "text-red-500 cursor-not-allowed"
+                            : ""
+                        }
+                      >
+                        <CiHeart size={25} />
+                      </button>
+                    </td>
+                  </tr>
+                ))
+              }
+            </tbody>
+          </table>
+        </div>
+
+        {/* ❤️ FAVORITES */}
+        <div className='w-[30%]'>
+          <div className="bg-white shadow rounded-xl border">
+
+            <h2 className="p-4 border-b font-bold text-lg">
+              ❤️ Favorite Items
+            </h2>
+
+            {
+              favorites.length === 0 ? (
+                <div className="p-6 text-center text-gray-500">
+                  No favorites yet
                 </div>
-              </div>
-              <div
-                tabIndex={0}
-                className="card card-compact dropdown-content bg-base-100 z-1 mt-3 w-52 shadow">
-                <div className="card-body">
-                  <span className="text-lg font-bold">8 Items</span>
-                  <span className="text-info">Subtotal: $999</span>
-                  <div className="card-actions">
-                    <button className="btn btn-primary btn-block">View cart</button>
+              ) : (
+                favorites.map(item => (
+                  <div key={item.id} className="flex justify-between p-3 border-b">
+                    <p>{item.title}</p>
+                    <p>${item.currentBidPrice}</p>
+
+                    <button
+                      onClick={() => handleRemove(item.id, item.currentBidPrice)}
+                      className="text-red-500"
+                    >
+                      ❌
+                    </button>
                   </div>
-                </div>
-              </div>
+                ))
+              )
+            }
+
+            {/* TOTAL */}
+            <div className="p-4 flex justify-between font-bold">
+              <span>Total</span>
+              <span>${total}</span>
             </div>
-            <div className="dropdown dropdown-end">
-              <div tabIndex={0} role="button" className="btn btn-ghost btn-circle avatar">
-                <div className="w-10 rounded-full">
-                  <img
-                    alt="Tailwind CSS Navbar component"
-                    src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp" />
-                </div>
-              </div>
-              <ul
-                tabIndex="-1"
-                className="menu menu-sm dropdown-content bg-base-100 rounded-box z-1 mt-3 w-52 p-2 shadow">
-                <li>
-                  <a className="justify-between">
-                    Profile
-                    <span className="badge">New</span>
-                  </a>
-                </li>
-                <li><a>Settings</a></li>
-                <li><a>Logout</a></li>
-              </ul>
-            </div>
+
           </div>
         </div>
 
       </div>
 
-      <div className='main-container flex gap-2 text-center'>
+      {/* FOOTER */}
+      <footer className="bg-white border-t py-8 mt-10 text-center">
+        <h2 className="text-xl font-bold">
+          Auction<span className="text-yellow-500">Gallery</span>
+        </h2>
+        <p className="text-gray-500 mt-2">Bid. Win. Own.</p>
+      </footer>
 
-        <div className='right-box w-[70%] border-2'>
-          {
-            data.map(item => (
-              <>
-                <div key={item.id} className='flex items-center justify-around gap-10 border border-black/20'>
-                  <img className='w-20 my-4 mx-4' src={item.image} alt="" />
-                  <p>{item.title}</p>
-                  <p>{item.description}</p>
-                  <p className='font-bold'>${item.currentBidPrice}</p>
-                  <p>{item.timeLeft}</p>
-                  <button>
-                    <CiHeart size={30} />
-                  </button>
-                  {/* <p>{item.bidsCount}</p> */}
-
-                </div>
-              </>
-            ))
-          }
-        </div>
-
-
-        <div className='left-box w-[30%] border-2'>left</div>
-
-
-      </div>
     </>
   )
 }
